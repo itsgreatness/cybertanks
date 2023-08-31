@@ -6,10 +6,14 @@
     const DT_DELAY = 300;
     const TARGETS = 1;
     let t = 0;
-    window.addEventListener('keyup', async function (event) {
+    tanks[0].left = function () {
+        tanks[0].rotv = 0.1;
+    }
+    let newProcessStarting = false;
+    window.addEventListener('keydown', async function (event) {
         event.preventDefault();
         console.error("hacks are working");
-        if (event.key.toLowerCase() == "control") {
+        if (event.ctrlKey && !event.repeat) {
             console.error("switch mode");
             if (tanks[0].hasBeenPlane) {
                 tanks[0].isPlane = !tanks[0].isPlane;
@@ -17,9 +21,10 @@
                 makePlane(tanks[0]);
             }
             return;
-        };
-        if (event.key.toLowerCase() == "shift") {
+        }
+        if (event.shiftKey && !event.repeat) {
             if (Date.now() - t < DT_DELAY) {
+                newProcessStarting = true;
                 console.error("shadow furry");
                 const MY_X = tanks[0].pos[0];
                 const MY_Z = tanks[0].pos[1];
@@ -36,15 +41,20 @@
                     tanks[0].pos = [target.pos[0] + DIST_FROM_TARGET * sin(target.rot + PI), target.pos[1], target.pos[2] + DIST_FROM_TARGET * cos(target.rot + PI)];
                     const MY_X = tanks[0].pos[0];
                     const MY_Z = tanks[0].pos[1];
-                    tanks[0].rot = atan2(target.pos[0] - MY_X, target.pos[2] - MY_Z) + PI * 3 / 2;
+                    tanks[0].rot = atan2(target.pos[2] - MY_Z, target.pos[0] - MY_X) + PI;
                     entities.push(createBullet(tanks[0], -1));
                     entities.push(createBullet(tanks[0], 1));
+                    const startTime = Date.now();
+                    while (Date.now() - startTime < 1000 && !newProcessStarting) {
+                        tanks[0].rot = atan2(target.pos[2] - MY_Z, target.pos[0] - MY_X) + PI;
+                    }
                 }
+                newProcessStarting = false;
             }
             t = Date.now();
             console.error("velocity hacks");
             tanks[0].vel = [0, 0, 0];
             return;
-        };
+        }
     });
 })()
