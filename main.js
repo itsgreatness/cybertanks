@@ -1,6 +1,7 @@
 (function () {
     const { sin, cos, PI, sqrt, atan2 } = Math;
     const dist = (x1, y1, x2, y2) => sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
+    const aim = (x1, y1, x2, y2) => atan2(y2 - y1, x2 - x1) + (y2 < y1 ? PI : 0);
     [SHOOT_DELAY, BULLET_SPEED, GRAVITY, TANK_FORWARD_SPEED, BULLET_LIFE] = [0, 160, 15, 80, 999];
     tanks[0].health = Infinity;
     const DT_DELAY = 300;
@@ -35,21 +36,19 @@
                     // sort by distance
                     (tank1, tank2) => dist(MY_X, tank1.pos[0], MY_Z, tank1.pos[2]) - dist(MY_X, tank2.pos[0], MY_Z, tank2.pos[2])
                 );
+                newProcessStarting = false;
                 for (let i = 0; i < TARGETS; i++) {
                     const target = targets.at(i);
                     let DIST_FROM_TARGET = 0.08 * BULLET_SPEED;
                     tanks[0].pos = [target.pos[0] + DIST_FROM_TARGET * sin(target.rot + PI), target.pos[1], target.pos[2] + DIST_FROM_TARGET * cos(target.rot + PI)];
-                    const MY_X = tanks[0].pos[0];
-                    const MY_Z = tanks[0].pos[1];
-                    tanks[0].rot = atan2(target.pos[2] - MY_Z, target.pos[0] - MY_X) + PI;
+                    tanks[0].rot = aim(tanks[0].pos[0], tanks[0].pos[2], target.pos[0], target.pos[2]);
                     entities.push(createBullet(tanks[0], -1));
                     entities.push(createBullet(tanks[0], 1));
                     const startTime = Date.now();
                     while (Date.now() - startTime < 1000 && !newProcessStarting) {
-                        tanks[0].rot = atan2(target.pos[2] - MY_Z, target.pos[0] - MY_X) + PI;
+                        tanks[0].rot = aim(tanks[0].pos[0], tanks[0].pos[2], target.pos[0], target.pos[2]);
                     }
                 }
-                newProcessStarting = false;
             }
             t = Date.now();
             console.error("velocity hacks");
