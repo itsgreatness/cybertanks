@@ -1,5 +1,6 @@
 const { sin, cos, PI, sqrt, atan2 } = Math;
 const dist = (x1, y1, x2, y2) => sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
+// aim from (x1, y1) to (x2, y2)
 const aim = (x1, y1, x2, y2) => atan2(y2 - y1, x2 - x1) + (y2 < y1 ? PI : 0);
 
 onmessage = (function (e) {
