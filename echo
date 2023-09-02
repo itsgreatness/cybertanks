@@ -1,0 +1,1 @@
+terser worker.js -m toplevel -c dead_code drop_debugger keep_fargs -o worker.min.js
