@@ -9,7 +9,7 @@ min:
 	@make drive
 	@make save
 save:
-	@python3 edit_bookmarks.py /Users/davidzhao/Library/Application\ Support/Google/Chrome/Profile\ 1/Bookmarks main.min.js
+	@python3 edit_bookmarks.py ~/Library/Application\ Support/Google/Chrome/Profile\ 1/Bookmarks main.min.js
 	@open -a Google\ Chrome "chrome:quit" --args --"profile-directory"="Profile 1"
 drive:
 	@touch ~/Google\ Drive/My\ Drive/Cybertanks/minify.js
