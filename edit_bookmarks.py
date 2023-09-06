@@ -27,7 +27,7 @@ with open(FILENAME, "r+", encoding="utf-8") as f:
                 if "cybertanks" in b["name"] and "hacks" in b["name"]:
                     file["roots"]["bookmark_bar"]["children"][i]["children"][j][
                         "url"
-                    ] = "javascript:" + quote(re.sub(r"javascript:", "", code, count=1))
+                    ] = code
                     f.seek(0)
                     f.truncate()
                     json.dump(file, f, indent="\t")
@@ -42,8 +42,7 @@ with open(FILENAME, "r+", encoding="utf-8") as f:
                         "meta_info": {"power_bookmark_meta": ""},
                         "name": "cybertanks hacks",
                         "type": "url",
-                        "url": "javascript:"
-                        + quote(re.sub(r"javascript:", "", code, count=1)),
+                        "url": code,
                     }
                 )
                 f.seek(0)
